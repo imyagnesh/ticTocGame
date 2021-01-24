@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+      }
+      .box {
+        display: flex;
+        font-size: 100px;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        background-color: royalblue;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center" id="currentTurn"></div>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: antiquewhite;
+        min-height: 90vh;
+        flex-direction: column;
+      "
+      id="container"
+    />
+    <script>
+      var currentTurn = 0;
+      var plyer1 = "X";
+      var plyer2 = "0";
+
+      // load boxes
+      var conrtainer = document.getElementById("container");
+
+      var innerHtml = "";
+      for (let i = 0; i < 3; i++) {
+        innerHtml =
+          innerHtml +
+          `<div style="display: flex; flex-direction: row">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>`;
+      }
+
+      conrtainer.innerHTML = innerHtml;
+
+      // promps user name
+      var player1Name = prompt("Please provide player 1 name", "");
+      var player2Name = prompt("Please provide player 2 name", "");
+
+      var turn = Math.round(Math.random());
+      if (turn == 0) {
+        currentTurn = player1Name;
+      } else {
+        currentTurn = player2Name;
+      }
+      var div = document.getElementById("currentTurn");
+      div.innerHTML = "Current Turn: " + currentTurn;
+
+      var boxes = document.getElementsByClassName("box");
+      for (let i = 0; i < boxes.length; i++) {
+        const box = boxes[i];
+        if (i % 2 === 0) {
+          box.style = "background-color:blue";
+        } else {
+          box.style = "background-color:royalblue";
+        }
+
+        box.addEventListener("click", function () {
+          if (box.innerHTML !== "") {
+            alert("Box already Selected");
+            return;
+          }
+
+          // turn change & add value in box
+          if (currentTurn == player1Name) {
+            box.innerHTML = plyer1;
+            currentTurn = player2Name;
+            div.innerHTML = "Current Turn: " + currentTurn;
+          } else {
+            box.innerHTML = plyer2;
+            currentTurn = player1Name;
+            div.innerHTML = "Current Turn: " + currentTurn;
+          }
+
+          var v = boxes[i].innerHTML;
+          if (i - 3 < 0) {
+            v = v + boxes[i + 6].innerHTML;
+          } else {
+            v = v + boxes[i - 3].innerHTML;
+          }
+          if (i + 3 > 8) {
+            v = v + boxes[i - 6].innerHTML;
+          } else {
+            v = v + boxes[i + 3].innerHTML;
+          }
+          if (v.length === 3) {
+            console.log(v);
+            if (v === `XXX`) {
+              alert(`${player1Name} Won`);
+              for (let i = 0; i < boxes.length; i++) {
+                boxes[i].innerHTML = "";
+              }
+            }
+            if (v === `000`) {
+              alert(`${player2Name} Won`);
+              for (let i = 0; i < boxes.length; i++) {
+                boxes[i].innerHTML = "";
+              }
+            }
+          }
+
+          // code for horizontal
+          var horizontal = Math.floor(i / 3) * 3;
+          var h = "";
+          h = h + boxes[horizontal].innerHTML;
+          h = h + boxes[horizontal + 1].innerHTML;
+          h = h + boxes[horizontal + 2].innerHTML;
+          if (h.length === 3) {
+            if (h === `XXX`) {
+              alert(`${player1Name} Won`);
+              for (let i = 0; i < boxes.length; i++) {
+                boxes[i].innerHTML = "";
+              }
+            }
+            if (h === `000`) {
+              alert(`${player2Name} Won`);
+              for (let i = 0; i < boxes.length; i++) {
+                boxes[i].innerHTML = "";
+              }
+            }
+          }
+
+          if (i === 0 || i === 4 || i === 8) {
+            var s1 = "";
+            s1 = s1 + boxes[0].innerHTML;
+            s1 = s1 + boxes[4].innerHTML;
+            s1 = s1 + boxes[8].innerHTML;
+            if (s1.length === 3) {
+              if (s1 === `XXX`) {
+                alert(`${player1Name} Won`);
+                for (let i = 0; i < boxes.length; i++) {
+                  boxes[i].innerHTML = "";
+                }
+              }
+              if (s1 === `000`) {
+                alert(`${player2Name} Won`);
+                for (let i = 0; i < boxes.length; i++) {
+                  boxes[i].innerHTML = "";
+                }
+              }
+            }
+          }
+
+          if (i === 2 || i === 4 || i === 6) {
+            var s2 = "";
+            s2 = s2 + boxes[2].innerHTML;
+            s2 = s2 + boxes[4].innerHTML;
+            s2 = s2 + boxes[6].innerHTML;
+            if (s2.length === 3) {  
+              if (s2 === `XXX`) {
+                alert(`${player1Name} Won`);
+                for (let i = 0; i < boxes.length; i++) {
+                  boxes[i].innerHTML = "";
+                }
+              }
+              if (s2 === `000`) {
+                alert(`${player2Name} Won`);
+                for (let i = 0; i < boxes.length; i++) {
+                  boxes[i].innerHTML = "";
+                }
+              }
+            }
+          }
+
+          if (Array.from(boxes).every((x) => x.innerHTML !== "")) {
+            alert("Match Tie");
+            for (let i = 0; i < boxes.length; i++) {
+              boxes[i].innerHTML = "";
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
